@@ -65,5 +65,4 @@ object TrackerDataModule {
             api = api
         )
     }
-
 }
