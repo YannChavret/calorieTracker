@@ -14,4 +14,6 @@ dependencies {
     implementation(project(Modules.trackerDomain))
 
     implementation(Coil.coilCompose)
+    implementation(project(":core-ui"))
+    implementation(project(":core-ui"))
 }
