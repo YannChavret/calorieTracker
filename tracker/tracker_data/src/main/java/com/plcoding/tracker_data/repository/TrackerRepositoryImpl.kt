@@ -8,8 +8,13 @@ import com.plcoding.tracker_data.remote.OpenFoodApi
 import com.plcoding.tracker_domain.model.TrackableFood
 import com.plcoding.tracker_domain.model.TrackedFood
 import com.plcoding.tracker_domain.repository.TrackerRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 class TrackerRepositoryImpl(
@@ -36,21 +41,28 @@ class TrackerRepositoryImpl(
         }
     }
 
-    override suspend fun insertTrackedFood(food: TrackedFood) {
+    override suspend fun insertTrackedFood(food: TrackedFood) = withContext(Dispatchers.IO) {
         dao.insertTrackedFood(food.toTrackedFoodEntity())
     }
+
+
 
     override suspend fun deleteTrackedFood(food: TrackedFood) {
         dao.deleteTrackedFood(food.toTrackedFoodEntity())
     }
 
     override fun getFoodsForDate(localDate: LocalDate): Flow<List<TrackedFood>> {
+        println("Localdate : $localDate")
         return dao.getFoodsForDate(
-            day = localDate.dayOfMonth,
-            month = localDate.monthValue,
-            year = localDate.year
-        ).map { entities ->
-            entities.map { it.toTrackedFood()}
-        }
+                day = localDate.dayOfMonth,
+                month = localDate.monthValue,
+                year = localDate.year
+            ).map { entities ->
+                println("Entities $entities")
+                entities.map { it.toTrackedFood() }
+            }
+            .catch {
+                println(it)
+            }
     }
 }

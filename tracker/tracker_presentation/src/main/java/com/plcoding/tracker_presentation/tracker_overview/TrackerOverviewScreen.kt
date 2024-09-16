@@ -10,15 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.annotation.ExperimentalCoilApi
 import com.plcoding.core.util.UiEvent
 import com.plcoding.core_ui.LocalSpacing
 import com.plcoding.core.R
-import com.plcoding.tracker_presentation.tracker_overview.components.AddButton
-import com.plcoding.tracker_presentation.tracker_overview.components.DaySelector
-import com.plcoding.tracker_presentation.tracker_overview.components.ExpandableMeal
-import com.plcoding.tracker_presentation.tracker_overview.components.NutrientsHeader
-import com.plcoding.tracker_presentation.tracker_overview.components.TrackedFoodItem
+import com.plcoding.tracker_presentation.tracker_overview.components.*
 
+@ExperimentalCoilApi
 @Composable
 fun TrackerOverviewScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,

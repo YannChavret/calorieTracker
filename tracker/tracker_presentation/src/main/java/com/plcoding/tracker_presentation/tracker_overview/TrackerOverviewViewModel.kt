@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrackerOverviewViewModel @Inject constructor(
-    val preferences: Preferences,
+    preferences: Preferences,
     private val trackerUseCases: TrackerUseCases,
 ): ViewModel() {
 
@@ -33,7 +33,9 @@ class TrackerOverviewViewModel @Inject constructor(
     private var getFoodsForDateJob: Job? = null
 
     init {
+        refreshFoods()
         preferences.saveShouldShowOnboarding(false)
+
     }
 
     fun onEvent(event: TrackerOverviewEvent) {
@@ -86,7 +88,9 @@ class TrackerOverviewViewModel @Inject constructor(
         getFoodsForDateJob = trackerUseCases
             .getFoodsForDate(state.date)
             .onEach { foods ->
+                println("Foods refreshed $foods")
                 val nutrientsResult = trackerUseCases.calculateMealNutrients(foods)
+                println("Nutrient Result $nutrientsResult")
                 state = state.copy(
                     totalCarbs = nutrientsResult.totalCarbs,
                     totalProtein = nutrientsResult.totalProtein,
@@ -106,6 +110,7 @@ class TrackerOverviewViewModel @Inject constructor(
                                 fat = 0,
                                 calories = 0
                             )
+                        println("Nutrients for meal $nutrientsForMeal")
                         it.copy(
                             carbs = nutrientsForMeal.carbs,
                             protein = nutrientsForMeal.protein,
@@ -116,5 +121,7 @@ class TrackerOverviewViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
+        println("TrackerState")
+        println(state.trackedFood)
     }
 }
